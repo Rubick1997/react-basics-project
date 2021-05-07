@@ -10,20 +10,23 @@ function ExpenseList({ expenses }) {
 	const filterChangeHandler = (selectedYear) => {
 		setFilteredYear(selectedYear);
 	};
+	const filteredExpenses = expenses.filter(function (item) {
+		return item.date.getFullYear().toString() === filteredYear;
+	});
 
+	let expensesContent = <p>No expenses found</p>;
+	if (filteredExpenses.length > 0) {
+		expensesContent = filteredExpenses.map((item) => (
+			<ExpenseItem key={item.id} item={item} />
+		));
+	}
 	return (
 		<Card className='expenses'>
 			<ExpensesFilter
 				onChangeFilter={filterChangeHandler}
 				selected={filteredYear}
 			/>
-			{expenses
-				.filter(function (item) {
-					return item.date.getFullYear() == filteredYear;
-				})
-				.map((item) => (
-					<ExpenseItem key={item.id} item={item} />
-				))}
+			{expensesContent}
 		</Card>
 	);
 }
